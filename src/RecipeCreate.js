@@ -1,31 +1,99 @@
 import React, { useState } from "react";
-import "./App.css";
-import RecipeCreate from "./RecipeCreate";
-import RecipeList from "./RecipeList";
-import RecipeData from "./RecipeData"
 
-function App() {
-  const [recipes, setRecipes] = useState(RecipeData);
 
-  // Add new recipe to current recipe list //
-  const createRecipe = (newRecipe) =>
-    setRecipes((currentRecipes) => [...currentRecipes, newRecipe]);
-    
-  // Remove recipe to delete from current recipe list //
-  const deleteRecipe = (indexToDelete) =>
-    setRecipes((currentRecipes) =>
-      currentRecipes.filter((recipe, index) => index !== indexToDelete)
-    );
+function RecipeCreate({ createRecipe }) {
+  // Initial empty form //
+  const initialFormState = {
+    name: "",
+    cuisine: "",
+    photo: "",
+    ingredients: "",
+    preparation: "",
+  };
 
-  // createRecipe passed to RecipeCreate.js //
-  // List of recipes and deleteRecipe handler passed to RecipeList.js //
+  // useState() initially sets formData as initialFormState //
+  const [formData, setFormData] = useState({...initialFormState});
+
+  // formData change handler //
+  const handleChange = ({ target }) => {
+      setFormData({ ...formData, [target.name]: target.value });
+  };
+
+  // Submit button handler - create new recipe & clear formData //
+  const handleSubmit = (event) => {
+    event.preventDefault();
+      createRecipe(formData);
+      setFormData({...initialFormState});
+  };
+
+  
   return (
-    <div className="App">
-      <header><h1>Delicious Food Recipes</h1></header>
-      <RecipeList recipes={recipes} deleteRecipe={deleteRecipe}/>
-      <RecipeCreate createRecipe={createRecipe}/>
-    </div>
+    <form name="create" onSubmit={handleSubmit}>
+      <table>
+        <tbody>
+          <tr>
+            <td>
+              <input 
+                id="name" 
+                type="text" 
+                name="name"
+                placeholder="Name"
+                required={true}
+                onChange={handleChange}
+                value={formData.name}
+              />
+            </td>
+            <td>
+              <input
+                id="cuisine"
+                type="text"
+                name="cuisine"
+                placeholder="Cuisine"
+                onChange={handleChange}
+                value={formData.cuisine}
+              />
+            </td>
+            <td>
+              <input
+                id="photo"
+                type="url"
+                name="photo"
+                placeholder="URL"
+                onChange={handleChange}
+                value={formData.photo}
+              />
+            </td>
+            <td>
+              <textarea
+                id="ingredients"
+                name="ingredients"
+                placeholder="Ingredients"
+                rows={2}
+                required={true}
+                onChange={handleChange}
+                value={formData.ingredients}
+                style={{fontFamily:"sans-serif"}}
+              />
+            </td>
+            <td>
+              <textarea
+                id="preparation"
+                name="preparation"
+                placeholder="Preparation"
+                rows={2}
+                onChange={handleChange}
+                value={formData.preparation}
+                style={{fontFamily:"sans-serif"}}
+              />
+            </td>
+            <td>
+              <button type="submit">Create</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </form>
   );
 }
 
-export default App;
+export default RecipeCreate;
