@@ -1,25 +1,31 @@
 import React, { useState } from "react";
+import "./App.css";
+import RecipeCreate from "./RecipeCreate";
+import RecipeList from "./RecipeList";
+import RecipeData from "./RecipeData"
 
-function RecipeCreate() {
+function App() {
+  const [recipes, setRecipes] = useState(RecipeData);
 
-  // TODO: When the form is submitted, a new recipe should be created, and the form contents cleared.
-  // TODO: Add the required input and textarea form elements.
-  // TODO: Add the required submit and change handlers
-  
+  // Add new recipe to current recipe list //
+  const createRecipe = (newRecipe) =>
+    setRecipes((currentRecipes) => [...currentRecipes, newRecipe]);
+    
+  // Remove recipe to delete from current recipe list //
+  const deleteRecipe = (indexToDelete) =>
+    setRecipes((currentRecipes) =>
+      currentRecipes.filter((recipe, index) => index !== indexToDelete)
+    );
+
+  // createRecipe passed to RecipeCreate.js //
+  // List of recipes and deleteRecipe handler passed to RecipeList.js //
   return (
-    <form name="create">
-      <table>
-        <tbody>
-          <tr>
-            <td></td>
-            <td>
-              <button type="submit">Create</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </form>
+    <div className="App">
+      <header><h1>Delicious Food Recipes</h1></header>
+      <RecipeList recipes={recipes} deleteRecipe={deleteRecipe}/>
+      <RecipeCreate createRecipe={createRecipe}/>
+    </div>
   );
 }
 
-export default RecipeCreate;
+export default App;
